@@ -44,7 +44,6 @@ describe("Snake", () => {
 
     it("should be able to move left", () => {
         const snake = new Snake()
-
         snake.setDirection('Down')
         snake.move();
         snake.setDirection('Left')
@@ -67,7 +66,6 @@ describe("Snake", () => {
     })
     it("when asked to move in reverse direction should not react", () => {
         const snake = new Snake()
-        console.log('TEST')
         snake.move();
         snake.move();
         snake.setDirection('Down')
@@ -76,14 +74,14 @@ describe("Snake", () => {
         snake.move();
         snake.setDirection('Left')
         snake.move();
-        snake.setDirection('Right') // should ignore this command and continue to move Left
+        snake.setDirection('Right') // should ignore command "Right" and continue moving Left
         snake.move();
 
         expect(snake.getHead()).toEqual(new Cell(2, 3))
         expect(snake.getTail()).toEqual([new Cell(4, 3), new Cell(3, 3)])
     })
 
-    it("should die if it bumps into itself", () => {
+    it("should restart if it bumps into itself", () => {
         const snake = new Snake()
         snake.move();
         snake.setDirection('Down')
@@ -108,7 +106,9 @@ describe("Snake", () => {
         snake.setDirection('Left')
         snake.move();
         snake.move();
-        snake.move();   // HEAD bumps into TAIL in a cell (3, 2)
+        snake.move();          // HEAD bumps into TAIL in a cell (3, 2)
+        console.log(snake.head);
+        console.log(snake.tail);
 
         snake.restartGame();
 

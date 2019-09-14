@@ -236,6 +236,30 @@ function () {
   }
 
   Snake.prototype.setDirection = function (direction) {
+    if (this.direction == "Left") {
+      if (direction === "Right") {
+        direction = this.direction; // continue moving left
+      }
+    }
+
+    if (this.direction == "Right") {
+      if (direction === "Left") {
+        direction = this.direction;
+      }
+    }
+
+    if (this.direction == "Up") {
+      if (direction === "Down") {
+        direction = this.direction;
+      }
+    }
+
+    if (this.direction == "Down") {
+      if (direction === "Up") {
+        direction = this.direction;
+      }
+    }
+
     this.direction = direction;
   };
 
@@ -246,25 +270,23 @@ function () {
       this.tail.shift();
     }
 
+    var newTail = this.tail;
+
     switch (this.direction) {
       case "Right":
-        this.head = new _Cell.Cell(this.head.x + 1, this.head.y);
+        var newHead1 = new _Cell.Cell(this.head.x + 1, this.head.y);
 
-        if (this.head === this.tail[0]) {
-          this.head = new _Cell.Cell(this.head.x - 2, this.head.y); // WHY it doesn't work? 
+        if (newTail.includes(newHead1, 0)) {
+          this.controller++;
+          this.restartGame();
+          break;
+        } else {
+          this.head = newHead1;
+          break;
         }
-
-        break;
 
       case "Down":
         this.head = new _Cell.Cell(this.head.x, this.head.y + 1);
-        /*
-        if (this.head === this.tail[0])
-        {
-            this.head = new Cell(this.head.x, this.head.y - 2)
-        }
-        */
-
         break;
 
       case "Up":
@@ -272,8 +294,17 @@ function () {
         break;
 
       case "Left":
-        this.head = new _Cell.Cell(this.head.x - 1, this.head.y);
-        break;
+        var newHead2 = new _Cell.Cell(this.head.x - 1, this.head.y);
+
+        if (newTail.includes(newHead2)) {
+          this.controller++;
+          this.restartGame();
+          break;
+        } else {
+          this.head = newHead2;
+          break;
+        }
+
     }
   };
 
@@ -285,11 +316,9 @@ function () {
     return this.head;
   };
 
-  Snake.prototype.isSnake = function () {
-    for (var i = 0; i < this.tail.length; i++) {
-      if (this.head === this.tail[i]) {
-        return true;
-      }
+  Snake.prototype.isSnake = function (cell) {
+    if (this.controller > 0) {
+      return true;
     }
 
     return false;
@@ -300,10 +329,8 @@ function () {
   };
 
   Snake.prototype.restartGame = function () {
-    if (this.isSnake) {
-      this.head = new _Cell.Cell(2, 0);
-      this.tail = [new _Cell.Cell(0, 0), new _Cell.Cell(1, 0)];
-    }
+    this.head = new _Cell.Cell(2, 0);
+    this.tail = [new _Cell.Cell(0, 0), new _Cell.Cell(1, 0)];
   };
 
   Snake.prototype.getTail = function () {
@@ -377,8 +404,9 @@ function () {
 
   Game.prototype.checkState = function () {
     var cell = this.snake.getHead(); // left the play area or ate itself??
+    //if (this.isOutside(cell) || this.snake.isSnake(cell)) {
 
-    if (this.isOutside(cell) || this.snake.isSnake()) {
+    if (this.isOutside(cell) || this.bumps()) {
       // dead
       return -1;
     } // ate apple?
@@ -417,6 +445,10 @@ function () {
         nbCellsX = _a.nbCellsX,
         nbCellsY = _a.nbCellsY;
     return cell.x < 0 || cell.x >= nbCellsX || cell.y < 0 || cell.y >= nbCellsY;
+  };
+
+  Game.prototype.bumps = function () {
+    return !this.snake.isSnake;
   };
 
   Game.prototype.getScore = function () {
@@ -687,7 +719,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55541" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49634" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
