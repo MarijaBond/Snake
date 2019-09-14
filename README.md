@@ -1,3 +1,8 @@
+﻿https://jovial-bartik-ee69f7.netlify.com/
+
+
+
+
 # 🐍 Snake 🐍
 
 Our goal is to create a working snake game, by finishing `Snake.ts` & `Grid.ts` alongside with the tests.
