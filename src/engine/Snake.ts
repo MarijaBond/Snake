@@ -8,7 +8,7 @@ export class Snake {
 
   direction: Direction = 'Right'
   tailSize = 2
-  controller = 0;
+  errorCheck = 0
 
   setDirection(direction: Direction) {
     if (this.direction == "Left") {
@@ -41,50 +41,52 @@ export class Snake {
       this.tail.shift()
     }
     const newTail = this.tail;
+    let newHead;
+
 
     switch (this.direction) {
       case "Right":
-        const newHead1 = new Cell(this.head.x + 1, this.head.y);
-        if (newTail.includes(newHead1, 0)) {
-          this.controller++;
+        newHead = new Cell(this.head.x + 1, this.head.y);
+        if (newTail.includes(newHead, 0)) {
+          this.errorCheck++;
           this.restartGame()
           break;
         }
         else {
-          this.head = newHead1;
+          this.head = newHead;
           break;
         }
       case "Down":
-          const newHead2 = new Cell(this.head.x, this.head.y + 1);
-          if (newTail.includes(newHead2, 0)) {
-            this.controller++;
+          newHead = new Cell(this.head.x, this.head.y + 1);
+          if (newTail.includes(newHead, 0)) {
+            this.errorCheck++;
             this.restartGame()
             break;
           }
           else {
-            this.head = newHead2;
+            this.head = newHead;
             break;
           }
       case "Up":
-          const newHead3 = new Cell(this.head.x, this.head.y - 1);
-          if (newTail.includes(newHead3, 0)) {
-            this.controller++;
+          newHead = new Cell(this.head.x, this.head.y - 1);
+          if (newTail.includes(newHead, 0)) {
+            this.errorCheck++;
             this.restartGame()
             break;
           }
           else {
-            this.head = newHead3;
+            this.head = newHead;
             break;
           }
       case "Left":
-        const newHead4 = new Cell(this.head.x - 1, this.head.y)
-        if (newTail.includes(newHead4)) {
-          this.controller++;
+        newHead = new Cell(this.head.x - 1, this.head.y)
+        if (newTail.includes(newHead)) {
+          this.errorCheck++;
           this.restartGame();
           break;
         }
         else {
-          this.head = newHead4;
+          this.head = newHead;
           break;
         }
     }
@@ -99,7 +101,7 @@ export class Snake {
   }
 
   isSnake(cell: Cell): boolean {
-    if (this.controller > 0) {
+    if (this.errorCheck > 0) {
       return true;
     }
     return false;
